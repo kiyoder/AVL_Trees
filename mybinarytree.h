@@ -158,7 +158,34 @@ public:
     //  /
     // x <- curr
     void zigright(node* curr) {
+        if (curr == nullptr || curr->parent == nullptr) {
+            // Rotation not possible, return
+            return;
+        }
 
+        node* pivot = curr;
+        node* parent = pivot->parent;
+        node* grandparent = parent->parent;
+
+        if (grandparent == nullptr) {
+            // Pivot is the root, update root pointer
+            root = pivot;
+        } else if (parent == grandparent->left) {
+            // Pivot's parent is the left child of its grandparent
+            grandparent->left = pivot;
+        } else {
+            // Pivot's parent is the right child of its grandparent
+            grandparent->right = pivot;
+        }
+
+        // Perform rotation
+        parent->left = pivot->right;
+        if (pivot->right != nullptr) {
+            pivot->right->parent = parent;
+        }
+        pivot->right = parent;
+        parent->parent = pivot;
+        pivot->parent = grandparent;
     }
 
     void print() {
